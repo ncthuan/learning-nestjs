@@ -24,7 +24,7 @@ export class UserController {
 
   @UseGuards(JwtAuthGuard)
   @Get()
-  //@ Role admin
+  //@Role admin
   async findAll(): Promise<User[]> {
     return this.userService.findAll();
   }

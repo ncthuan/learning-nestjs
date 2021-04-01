@@ -3,24 +3,82 @@
 <head>
   <meta charset="utf-8">
   <title>App 0</title>
-  <link href="//code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet" type="text/css">
-  <link href="//fonts.googleapis.com/css?family=Titillium+Web:700|Source+Serif+Pro:400,700|Merriweather+Sans:400,700|Source+Sans+Pro:400,300,600,700,300italic,400italic,600italic,700italic" rel="stylesheet" type="text/css">
+  <!-- <link href="//code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet" type="text/css"> -->
+  <!-- <link href="//fonts.googleapis.com/css?family=Titillium+Web:700|Source+Sans+Pro:400,300,600,700,300italic,400italic,600italic,700italic" rel="stylesheet" type="text/css"> -->
   <link rel="stylesheet" href="https://demo.productionready.io/main.css">
+  <link rel="stylesheet" href="./style.css">
 </head>
 <body>
 
   <nav class="navbar navbar-light">
     <div class="container">
-      <a class="navbar-brand" href="#/">conduit</a>
+      <a class="navbar-brand" href="index.html">app0</a>
       <ul class="nav navbar-nav pull-xs-right">
-        <li class="nav-item"><a class="nav-link" href="">Home</a></li>
-        <li class="nav-item"><a class="nav-link" href="login">Sign in</a></li>
-        <li class="nav-item"><a class="nav-link" href="signup">Sign up</a></li>
-      </ul><!-- react-empty: 12 -->
+        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+        <li class="nav-item"><a id="login-toggle" class="nav-link" href="#">Login</a></li>
+        <li class="nav-item"><a id="signup-toggle" class="nav-link" href="#">Sign up</a></li>
+      </ul>
     </div>
   </nav>
 
+  <div id="login-page" style="display: none">
+    <div class="container page">
+      <div class="row">
+        <div class="col-md-6 offset-md-3 col-xs-12">
+          <h1 class="text-xs-center">Login</h1>
+          <p class="text-xs-center">
+            <a class="" href="#">Need an account?</a>
+          </p>
+
+          <form id="login-form" action="/login" method="post">
+            <fieldset>
+              <fieldset class="form-group">
+              <input type="text" class="form-control form-control-lg" placeholder="Username" name="username">
+              </fieldset>
+              <fieldset class="form-group">
+                <input type="password" class="form-control form-control-lg" placeholder="Password" name="password">
+              </fieldset>
+              <button class="btn btn-lg btn-primary pull-xs-right" type="submit">Login</button>
+            </fieldset>
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="signup-page" style="display: none">
+    <div class="container page">
+      <div class="row">
+        <div class="col-md-6 offset-md-3 col-xs-12">
+          <h1 class="text-xs-center">Sign Up</h1>
+          <p class="text-xs-center">
+            <a class="" href="#">Have an account?</a>
+          </p>
+
+          <form action="/user/signup" method="post">
+            <fieldset>
+              <fieldset class="form-group">
+                <input type="text" class="form-control form-control-lg" placeholder="Username" name="username">
+              </fieldset>
+              <fieldset class="form-group">
+                <input type="email" class="form-control form-control-lg" placeholder="Email" name="email">
+              </fieldset>
+              <fieldset class="form-group">
+                <input type="password" class="form-control form-control-lg" placeholder="Password" name="password">
+              </fieldset>
+              <button class="btn btn-lg btn-primary pull-xs-right" type="submit">Sign up</button>
+            </fieldset>
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div id="main"></div>
 
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script type="text/javascript" src="./script.js"></script>
 </body>
 </html>
