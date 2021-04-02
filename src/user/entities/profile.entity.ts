@@ -5,10 +5,6 @@ export class Profile {
   @PrimaryGeneratedColumn()
   id: number;
 
-  // @Column()
-  // @Index({ unique: true })
-  // username: string;
-
   @Column({ nullable: true })
   name: string;
 
