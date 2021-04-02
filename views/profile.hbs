@@ -1,0 +1,42 @@
+<div class="profile-page">
+  <div class="container user-info">
+    <div class="row">
+      <div class="col-xs-12 col-md-10 offset-md-1">
+        <img src="https://static.productionready.io/images/smiley-cyrus.jpg" class="user-img">
+        <h4>{{profile.name}}</h4>
+        <p class="col-md-6 offset-md-3 col-xs-12">{{profile.bio}}</p>
+        <button class="btn btn-sm action-btn btn-outline-secondary">#</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12 col-md-10 offset-md-1">
+        <div class="category-toggle">
+          <ul class="nav nav-pills outline-active">
+            <li class="nav-item"><a class="nav-link active" href="#">Info</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Blank</a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <div class="article-preview">
+            <div class="article-meta">
+              <ul>
+                <li>Gender: {{profile.gender}}</li>
+                <li>Birthday: {{profile.birthDate}}</li>
+                <li>Ava: {{profile.avatar}}</li>
+              </ul>
+              <div class="pull-xs-right">
+                <button class="btn btn-sm btn-outline-primary">Edit profile</button>
+                <button class="btn btn-sm action-btn btn-outline-secondary">#</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+</div>

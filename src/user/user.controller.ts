@@ -1,11 +1,11 @@
 import { 
-  Controller, 
-  Get, Post, Put, Delete, 
-  Body, Param, 
-  UsePipes, UseGuards 
+  Controller, Get, Post, Put, Delete, 
+  Body, Param,
+  UsePipes, UseGuards,
+  Render
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { User } from './entities';
+import { Profile, User } from './entities';
 import { CreateUserDto, UpdateUserDto } from './dto';
 import { ValidationPipe } from './validation.pipe';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -31,8 +31,15 @@ export class UserController {
 
   @UseGuards(JwtAuthGuard)
   @Get(':username')
-  async findOne(@Param('username') username: string): Promise<User> {
-    return this.userService.findUser(username);
+  @Render('profile')
+  async findOne(@Param('username') username: string): Promise<Object> {
+    const user = await this.userService.findUserProfile(username);
+    if (!user.profile) {
+      user.profile = new Profile();
+      user.profile.name = username;
+    }
+    Object.setPrototypeOf(user, Object.prototype);
+    return user;
   }
 
   @UseGuards(JwtAuthGuard)
