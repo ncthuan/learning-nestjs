@@ -18,14 +18,14 @@ export class UserController {
 
   @Post('signup')
   @UsePipes(ValidationPipe)
-  async create(@Body() createUserDto: CreateUserDto): Promise<User> {
+  async create(@Body() createUserDto: CreateUserDto): Promise<Object> {
     return this.userService.create(createUserDto);
   }
 
   @UseGuards(JwtAuthGuard)
   @Get()
   //@Role admin
-  async findAll(): Promise<User[]> {
+  async findAll(): Promise<Object[]> {
     return this.userService.findAll();
   }
 
@@ -44,14 +44,15 @@ export class UserController {
 
   @UseGuards(JwtAuthGuard)
   @Put(':username')
+  @Render('profile')
   @UsePipes(ValidationPipe)
-  async update(@Param('username') username: string, @Body() updateUserDto: UpdateUserDto) {
+  async update(@Param('username') username: string, @Body() updateUserDto: UpdateUserDto): Promise<Object> {
     return this.userService.update(username, updateUserDto);
   }
 
   @UseGuards(JwtAuthGuard)
   @Delete(':username')
-  async remove(@Param('username') username: string) {
+  async remove(@Param('username') username: string): Promise<any> {
     return this.userService.remove(username);
   }
 

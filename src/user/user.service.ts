@@ -8,11 +8,12 @@ import { CreateUserDto, UpdateUserDto } from './dto';
 export class UserService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>
-    //@InjectRepository(Profile) private profileRepository: Repository<Profile>
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
-    return this.userRepository.save(createUserDto);
+    let user = new User()
+    user = Object.assign(user, createUserDto);
+    return this.userRepository.save(user);
   }
 
   async findAll(): Promise<User[]> {
@@ -28,9 +29,9 @@ export class UserService {
   }
 
   //general update - not optimized
-  async update(username: string, updateUserDto: UpdateUserDto) {
+  async update(username: string, updateUserDto: UpdateUserDto): Promise<User> {
     let user = await this.userRepository.findOne({username}, {relations:['profile']});
-    if (user.profile === null) {
+    if (updateUserDto.profile && user.profile === null) {
       user.profile = new Profile();
     }
     user = Object.assign(user, updateUserDto);

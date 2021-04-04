@@ -1,7 +1,7 @@
 import { IsEmail } from 'class-validator';
 import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, Index, BeforeInsert } from 'typeorm';
 import { Profile } from './profile.entity';
-//import * as argon2 from 'argon2';
+import * as argon2 from 'argon2';
 
 @Entity()
 export class User {
@@ -13,17 +13,17 @@ export class User {
   username: string;
 
   @Column()
-  //@Index({ unique: true })
+  @Index({ unique: true })
   @IsEmail()
   email: string;
 
   @Column()
   password: string;
 
-  // @BeforeInsert()
-  // async hashPassword() {
-  //   this.password = await argon2.hash(this.password);
-  // }
+  @BeforeInsert()
+  async hashPassword() {
+    this.password = await argon2.hash(this.password);
+  }
 
   @JoinColumn()
   @OneToOne(type => Profile, {
