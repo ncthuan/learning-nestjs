@@ -1,49 +1,88 @@
 
-let loginToggle = document.getElementById('login-toggle');
-let signupToggle = document.getElementById('signup-toggle');
-let loginPage = document.getElementById('login-page');
-let signupPage = document.getElementById('signup-page');
-let loginForm = document.getElementById('login-form');
-
-loginToggle.onclick = () => {
-  signupPage.style.display = 'none';
-  loginPage.style.display = 'block';
+const isLoggedIn = () => {
+  const token = localStorage.token;
+  const expired = localStorage.tokenExp < Date.now()/1000;
+  if (!token || expired) return false;
+  else return true;
 }
 
-signupToggle.onclick = () => {
-  loginPage.style.display = 'none';
-  signupPage.style.display = 'block';
+const logout = () => {
+  localStorage.removeItem('token');
+  localStorage.removeItem('tokenExp');
+  localStorage.removeItem('user');
 }
 
-// function submitForm(form) {
-//   const XHR = new XMLHttpRequest();
-//   const FD = new FormData( form );
+const parseJwt = (token) => {
+  return JSON.parse(atob(token.split('.')[1]));
+}
 
-//   XHR.addEventListener( "load", function(event) {
-//     alert( event.target.responseText );
-//   });
 
-//   XHR.addEventListener( "error", function(event) {
-//     alert( 'Oops! Something went wrong.' );
-//   });
+const loginPage = $('#login-page');
+const signupPage = $('#signup-page');
 
-//   console.log(FD);
-//   XHR.open("POST", form.action);
-//   XHR.send(FD);
-// }
+if (!isLoggedIn()) {
+  loginPage.show();
+}
 
-// loginForm.addEventListener( "submit", function(event) {
-//   event.preventDefault();
-//   submitForm(loginForm);
-// });
+$('#login-toggle').click(() => {
+  signupPage.hide();
+  loginPage.show();
+});
+
+$('#signup-toggle').click(() => {
+  loginPage.hide();
+  signupPage.show();
+});
+
+
 
 $('#login-form')
-    .ajaxForm({
-        url : 'login', // or whatever
-        dataType : 'json',
-        success : function (response) {
-            alert(response);
-        }
+  .ajaxForm({
+    url: 'login',
+    type: 'POST',
+    dataType: 'json',
+    success: (response) => {
+      payload = parseJwt(response.token)
+      localStorage.setItem("username", payload.username);
+      localStorage.setItem("tokenExp", String(payload.exp));
+      localStorage.setItem("token", response.token);
+      alert('logged in');
+      loginPage.hide();
+    },
+    error: (error) => {
+      alert(error.responseText);
+    }
+  });
 
-    })
-;
+$('#signup-form')
+  .ajaxForm({
+    url: 'user/signup',
+    type: 'POST',
+    dataType: 'json',
+    success: (response) => {
+      alert("user created");
+      signupPage.hide();
+    },
+    error: (error) => {
+      alert(error.responseText);
+    }
+  });
+
+
+$('#profile-toggle').click(() => {
+  //event.preventDefault();
+  $.ajax({
+    url: "user/"+localStorage.username,
+    method: "GET",
+    timeout: 0,
+    headers: {
+      "Authorization": "Bearer " + localStorage.token
+    },
+    success: (response) => {
+      $('#main').html(response);
+    },
+    error: (error) => {
+      alert(error.responseText);
+    }
+  });
+});

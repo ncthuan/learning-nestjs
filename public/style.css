@@ -6,3 +6,29 @@
 .auth-page .container {
   
 }
+
+.profile-page .user-header {
+  text-align: center;
+  background: #f3f3f3;
+  padding: 2rem 0 1rem;
+}
+
+.profile-page .user-header .user-img {
+  width: 100px;
+  height: 100px;
+  border-radius: 100px;
+  margin-bottom: 1rem;
+}
+
+.profile-page .user-header .action-btn {
+  float: right;
+  color: #999;
+  border: 1px solid #999;
+}
+
+.profile-page .articles-toggle {
+    margin: 1rem 0 -1px;
+}
+
+
+
