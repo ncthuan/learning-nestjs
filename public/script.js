@@ -25,7 +25,9 @@ if (!isLoggedIn()) {
 }
 
 $('#login-toggle').click(() => {
+  logout();
   signupPage.hide();
+  $('#login-toggle').html("Login");
   loginPage.show();
 });
 
@@ -48,6 +50,7 @@ $('#login-form')
       localStorage.setItem("token", response.token);
       alert('logged in');
       loginPage.hide();
+      $('#login-toggle').html("Logout");
     },
     error: (error) => {
       alert(error.responseText);
