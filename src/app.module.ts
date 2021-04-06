@@ -5,21 +5,9 @@ import { AuthModule } from './auth/auth.module';
 import { AuthController } from './auth/auth.controller';
 import { TypeOrmModule }  from '@nestjs/typeorm';
 import { Connection } from 'typeorm';
-import { ServeStaticModule } from '@nestjs/serve-static';
-import { join } from 'path';
 
 @Module({
-  imports: [
-    TypeOrmModule.forRoot(), 
-    UserModule, 
-    AuthModule,
-    ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'public'),
-      serveStaticOptions: {
-        cacheControl: true
-      }
-    }),
-  ],
+  imports: [TypeOrmModule.forRoot(), UserModule, AuthModule],
   controllers: [AuthController, UserController],
   providers: [],
 })

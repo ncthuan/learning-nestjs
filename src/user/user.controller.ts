@@ -9,10 +9,11 @@ import { Profile, User } from './entities';
 import { CreateUserDto, UpdateUserDto } from './dto';
 import { ValidationPipe } from './validation.pipe';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-// import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @Controller('user')
-// @ApiTags('user') @ApiBearerAuth()
+@ApiTags('user') 
+@ApiBearerAuth()
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
