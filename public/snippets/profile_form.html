@@ -1,0 +1,48 @@
+<div class="container page">
+  <div class="row">
+    <div class="col-md-6 offset-md-3 col-xs-12 overlay-form">
+      <button class="pull-xs-right" onclick="$('#edit-profile-page').hide()">X</button>
+      <h3 class="text-xs-center" style="margin-bottom: 1rem">Edit Profile</h3>
+      <form id="edit-profile-form" enctype="multipart/form-data">
+        <!-- ava -->
+        <fieldset class="form-control">Avatar: 
+          <input id="input-user-img" type="file" accept="image/png, image/jpg, image/jpeg" class="pull-xs-right" name="avatar">
+          <div id="preview">Preview:
+            <div class="text-xs-center">
+              <img id="preview-user-img">
+            </div>
+          </div>
+        </fieldset>
+        <!-- name -->
+        <input type="text" class="form-control" maxlength="50" placeholder="Name" name="name">
+        <!-- bio -->
+        <textarea class="form-control" rows="3" maxlength="500" placeholder="Short bio about you" name="bio"></textarea>
+        <!-- gender -->
+        <fieldset class="form-control">
+          <input type="radio" id="male" name="gender" value="Male">
+          <label for="male">Male</label><br>
+          <input type="radio" id="female" name="gender" value="Female">
+          <label for="female">Female</label><br>
+          <input type="radio" id="other" name="gender" value="Other">
+          <label for="other">Other</label><br>
+        </fieldset>
+        <!-- birthday -->
+        <input type="date" class="form-control" name="birthday">
+        <!-- tel -->
+        <input type="tel" class="form-control" placeholder="Phone number" name="tel">
+        <!-- city -->
+        <select class="form-control" name="city" placeholder>
+          <option value="" disabled selected>Choose your city</option>
+          <option value="City A">City A</option>
+          <option value="City B">City B</option>
+        </select>
+        <!-- is student? -->
+        <fieldset class="form-control">Is a student?  
+          <input type="checkbox" id="is-student" name="isStudent" style="margin-left: 15px;">
+        </fieldset>
+        <!-- submit -->
+        <button class="btn btn-lg btn-primary pull-xs-right" type="submit">Save</button>
+      </form>
+    </div>
+  </div>
+</div>
