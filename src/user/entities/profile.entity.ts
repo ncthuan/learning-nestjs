@@ -5,21 +5,28 @@ export class Profile {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, length: 50 })
   name: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, length: 500 })
   bio: string;
 
   @Column({ nullable: true })
-  gender: boolean;
+  gender: string;
 
   @Column({ nullable: true })
-  birthDate: Date;
+  birthday: Date;
 
   @Column({ nullable: true })
-  avatar: string;
+  avatarURL: string;
+  
+  @Column({ nullable: true, length: 15 })
+  @Index({ unique: true })
+  tel: string;
 
+  @Column({ nullable: true })
+  city: string;
 
-
+  @Column({ nullable: true })
+  isStudent: boolean;
 }

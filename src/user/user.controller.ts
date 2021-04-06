@@ -1,15 +1,15 @@
 import { 
   Controller, Get, Post, Put, Delete, 
-  Body, Param,
-  UsePipes, UseGuards,
-  Render
+  Body, Param, Render,
+  UsePipes, UseGuards, UseInterceptors, UploadedFile, HttpException,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { Profile, User } from './entities';
-import { CreateUserDto, UpdateUserDto } from './dto';
+import { CreateUserDto, UpdateUserDto, UpdateProfileDto } from './dto';
 import { ValidationPipe } from './validation.pipe';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
+
 
 @Controller('user')
 @ApiTags('user') 
@@ -20,7 +20,8 @@ export class UserController {
   @Post('signup')
   @UsePipes(ValidationPipe)
   async create(@Body() createUserDto: CreateUserDto): Promise<Object> {
-    return this.userService.create(createUserDto);
+    const user = await this.userService.create(createUserDto);
+    return ;
   }
 
   @UseGuards(JwtAuthGuard)
@@ -34,26 +35,40 @@ export class UserController {
   @Get(':username')
   @Render('profile')
   async findOne(@Param('username') username: string): Promise<Object> {
-    const user = await this.userService.findUserProfile(username);
-    if (!user.profile) {
-      user.profile = new Profile();
-      user.profile.name = username;
-    }
+    let user: any = await this.userService.findUserProfile(username);
+    if (!user.profile) user.profile = {name: username};
     Object.setPrototypeOf(user, Object.prototype);
     return user;
   }
 
+  @UseInterceptors(FileInterceptor('avatar',{dest: './public/upload/avatar'}))
   @UseGuards(JwtAuthGuard)
   @Put(':username')
-  @Render('profile')
   @UsePipes(ValidationPipe)
-  async update(@Param('username') username: string, @Body() updateUserDto: UpdateUserDto): Promise<Object> {
-    return this.userService.update(username, updateUserDto);
+  @Render('profile')
+  async update(
+    @Param('username') username: string, 
+    @Body() formData: any,
+    @UploadedFile() file: Express.Multer.File
+  ): Promise<Object> {
+    let update = new UpdateUserDto();
+    update.profile = new UpdateProfileDto();
+    if (file) {
+      update.profile.avatarURL = file.filename;
+    }
+    if (formData.isStudent === "on") formData.isStudent = true;
+    update.profile = Object.assign(update.profile, formData);
+    
+    console.log(file);
+    console.log(formData);
+    //throw new HttpException("", 500)
+    const user: Object = await this.userService.update(username, update);
+    return user;
   }
 
   @UseGuards(JwtAuthGuard)
   @Delete(':username')
-  async remove(@Param('username') username: string): Promise<any> {
+  async remove(@Param('username') username: string): Promise<Object> {
     return this.userService.remove(username);
   }
 
