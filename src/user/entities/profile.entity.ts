@@ -14,10 +14,10 @@ export class Profile {
   @Column({ nullable: true })
   gender: string;
 
-  @Column({ nullable: true })
-  birthday: Date;
+  @Column({ nullable: true, type:'date' })
+  birthday: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, unique: true })
   avatarURL: string;
   
   @Column({ nullable: true, length: 15 })
@@ -26,7 +26,4 @@ export class Profile {
 
   @Column({ nullable: true })
   city: string;
-
-  @Column({ nullable: true })
-  isStudent: boolean;
 }

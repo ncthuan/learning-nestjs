@@ -79,6 +79,7 @@ $('#profile-toggle').click(() => {
     success: (response) => {
       $('#main').html(response);
       setupProfileView();
+      history.pushState(localStorage.username,'user','/'+localStorage.username)
     },
     error: (error) => {
       alert(error.responseText);
@@ -90,20 +91,16 @@ const setupProfileView = () => {
   const setupEditProfileForm = () => {
     $('#edit-profile-form')
       .ajaxForm({
-        url: 'user/'+localStorage.username,
+        url: 'user/'+localStorage.username+'/profile',
         type: 'PUT',
         headers: { Authorization: 'Bearer '+localStorage.token },
-        beforeSubmit: (arr) => {//arr: array of multipart form
-          
-        },
         success: (response) => {
           $('#main').html(response);
           $('#edit-profile-page').hide();
         },
         error: (error) => {
           alert(error.responseText);
-        },
-        clearForm: true
+        }
       });
 
     $('#input-user-img').change((event) => {
@@ -117,8 +114,9 @@ const setupProfileView = () => {
     
   $('#edit-profile-button').click(() => {
     $.ajax({
-      url: 'snippets/profile_form.html',
+      url: 'user/'+localStorage.username+'/profile',
       method: 'GET',
+      headers: { Authorization: 'Bearer '+localStorage.token },
       success: (response) => {
         $('#edit-profile-page').html(response).show();
         setupEditProfileForm();
@@ -142,9 +140,4 @@ const setupProfileView = () => {
       }
     });
   });
-}
-
-
-const parseEditProfileFormData = (arr) => {
-
 }

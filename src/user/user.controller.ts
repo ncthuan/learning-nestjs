@@ -1,7 +1,8 @@
 import { 
   Controller, Get, Post, Put, Delete, 
   Body, Param, Render,
-  UsePipes, UseGuards, UseInterceptors, UploadedFile, HttpException,
+  UsePipes, UseGuards, UseInterceptors, UploadedFile, 
+  HttpException, HttpStatus,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto, UpdateUserDto, UpdateProfileDto } from './dto';
@@ -9,6 +10,7 @@ import { ValidationPipe } from './validation.pipe';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
 
 
 @Controller('user')
@@ -41,28 +43,47 @@ export class UserController {
     return user;
   }
 
-  @UseInterceptors(FileInterceptor('avatar',{dest: './public/upload/avatar'}))
   @UseGuards(JwtAuthGuard)
   @Put(':username')
   @UsePipes(ValidationPipe)
   @Render('profile')
-  async update(
-    @Param('username') username: string, 
-    @Body() formData: any,
-    @UploadedFile() file: Express.Multer.File
-  ): Promise<Object> {
-    let update = new UpdateUserDto();
-    update.profile = new UpdateProfileDto();
-    if (file) {
-      update.profile.avatarURL = file.filename;
+  async updateUser(@Param('username') username: string, @Body() updateUserDto: UpdateUserDto): Promise<Object> {    
+    const user: Object = await this.userService.updateUser(username, updateUserDto);
+    if (!user) {
+      throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
     }
-    if (formData.isStudent === "on") formData.isStudent = true;
-    update.profile = Object.assign(update.profile, formData);
-    
-    console.log(file);
-    console.log(formData);
-    //throw new HttpException("", 500)
-    const user: Object = await this.userService.update(username, update);
+    return user;
+  }
+
+  @UseInterceptors(FileInterceptor('avatar', {
+    storage: diskStorage({
+      destination:'./public/upload/avatar',
+      filename: (req, file, cb) => {
+        cb(null, file.originalname);  // need to improve
+      }
+    })
+  }))
+  @UseGuards(JwtAuthGuard)
+  @Put(':username/profile')
+  @UsePipes(ValidationPipe)
+  @Render('profile')
+  async updateProfile(
+    @Param('username') username: string, 
+    @UploadedFile() avatarFile: Express.Multer.File,
+    @Body() updateProfileDto: UpdateProfileDto,
+  ): Promise<Object> {
+    if (avatarFile) {
+      updateProfileDto.avatarURL = '/upload/avatar/'+avatarFile.filename;
+    }
+    const user: Object = await this.userService.updateProfile(username, updateProfileDto);
+    return user;
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get(':username/profile')
+  @Render('profile_form')
+  async getProfile(@Param('username') username: string): Promise<Object> {
+    const user: Object = await this.userService.findUserProfile(username);
     return user;
   }
 

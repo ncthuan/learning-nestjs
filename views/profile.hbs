@@ -3,7 +3,7 @@
     <div class="container">
       <div class="row">
         <div class="col-xs-12 col-md-10 offset-md-1">
-          <img src="https://static.productionready.io/images/smiley-cyrus.jpg" class="user-img">
+          <img class="user-img" src="{{#if profile.avatarURL}} {{profile.avatarURL}} {{else}} https://static.productionready.io/images/smiley-cyrus.jpg {{/if}}">
           <h4>{{profile.name}}</h4>
           <p class="col-md-6 offset-md-3 col-xs-12">{{profile.bio}}</p>
           <button class="btn btn-sm action-btn btn-outline-secondary"># Button</button>
@@ -25,11 +25,10 @@
         <div class="article-preview">
           <div class="article-meta">
             <ul><!-- class="col-xs-12 col-md-10 offset-md-1" -->
-              <li>Gender: {{profile.gender}}</li>
-              <li>Birthday: {{profile.birthDate}}</li>
-              <li>Phone number: {{profile.tel}}</li>
-              <li>City: {{profile.city}}</li>
-              <li>Favorite number: {{profile.favNumber}}</li>
+              <li><b>Gender:</b> {{profile.gender}}</li>
+              <li><b>Birthday:</b> {{profile.birthday}}</li>
+              <li><b>Phone number:</b> {{profile.tel}}</li>
+              <li><b>City:</b> {{profile.city}}</li>
             </ul>
             <div class="pull-xs-right">
               <button id="edit-profile-button" class="btn btn-sm btn-outline-primary">Edit profile</button>

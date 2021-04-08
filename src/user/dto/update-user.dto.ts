@@ -1,9 +1,10 @@
-import { PartialType, OmitType } from '@nestjs/mapped-types';
-import { UpdateProfileDto } from '.';
-import { CreateUserDto } from './create-user.dto';
+import { IsNotEmpty } from 'class-validator';
 
-export class UpdateUserDto extends PartialType(
-  OmitType(CreateUserDto, ['username'] as const)
-) {
-  profile: UpdateProfileDto;
+export class UpdateUserDto {
+  @IsNotEmpty()
+  readonly password: string;
+  
+  readonly newEmail?: string;
+
+  readonly newPassword?: string;
 }
