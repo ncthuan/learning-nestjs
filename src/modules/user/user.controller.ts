@@ -6,13 +6,11 @@ import {
   Body,
   Param,
   Req,
-  UsePipes,
-  ValidationPipe,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { UserService } from './user.service';
 import { UpdateUserDto, UpdateProfileDto } from './dto';
-import { Auth } from '../decorator';
+import { Auth } from 'src/decorators/decorator';
 
 @Controller('user')
 @ApiTags('user')
@@ -20,7 +18,7 @@ import { Auth } from '../decorator';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  //
+  // All can access user data
   @Get(':username')
   async getUser(@Param('username') username: string): Promise<any> {
     return this.userService.getUser(username);
@@ -31,9 +29,8 @@ export class UserController {
     return this.userService.getUserProfile(username);
   }
 
-  //
+  // All can update/del their own user data
   @Post('')
-  @UsePipes(ValidationPipe)
   async updateUser(
     @Req() req,
     @Body() updateUserDto: UpdateUserDto,
@@ -42,7 +39,6 @@ export class UserController {
   }
 
   @Post('profile')
-  @UsePipes(ValidationPipe)
   async updateProfile(
     @Req() req,
     @Body() updateProfileDto: UpdateProfileDto,

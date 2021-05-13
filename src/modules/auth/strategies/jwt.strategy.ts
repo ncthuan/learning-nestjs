@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { ConfigService } from 'src/config.service';
+import { ConfigService } from 'src/modules/shared/services/config.service';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -9,15 +9,15 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: 'ncthuan', // migrate to config
+      secretOrKey: configService.jwtConfig.accessTokenSecret,
     });
   }
 
   async validate(payload: any) {
-    return { 
-      sub: payload.sub, 
-      username: payload.username, 
-      email: payload.email
+    return {
+      sub: payload.sub,
+      username: payload.username,
+      email: payload.email,
     };
   }
 }

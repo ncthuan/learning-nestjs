@@ -1,12 +1,12 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { User, Profile } from './entities';
+import { User, Profile } from 'src/database/entities';
 import {
   CreateUserDto,
   UpdateUserDto,
   UpdateProfileDto,
-  AdminUpdateUserDto,
+  SuperAdminUpdateUserDto,
   PagingDto,
 } from './dto';
 import * as argon2 from 'argon2';
@@ -23,17 +23,10 @@ export class UserService {
     return this.userRepository.save(user);
   }
 
-  async getAll(
+  async getUsersByProfileFilter(
     paging: PagingDto,
     profileParams: UpdateProfileDto,
   ): Promise<User[]> {
-    //console.log(profileParams);
-    // return this.userRepository.find({
-    //   relations: ['profile'],
-    //   where: { profile: { gender: Gender.MALE } },
-    //   skip: paging.offset,
-    //   take: paging.limit,
-    // });
     const query = this.userRepository
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.profile', 'profile');
@@ -42,6 +35,7 @@ export class UserService {
       query.where('profile.gender = :gender', { gender: profileParams.gender });
 
     if (profileParams.birthday)
+      // eslint-disable-next-line prettier/prettier
       query.andWhere('profile.birthday = :birthday', { birthday: profileParams.birthday });
 
     return query.skip(paging.offset).take(paging.limit).getMany();
@@ -79,10 +73,10 @@ export class UserService {
 
   async adminUpdateUser(
     username: string,
-    adminUpdateUserDto: AdminUpdateUserDto,
+    updateUserDto: SuperAdminUpdateUserDto,
   ): Promise<User> {
     let user = await this.userRepository.findOne({ username });
-    user = Object.assign(user, adminUpdateUserDto);
+    user = Object.assign(user, updateUserDto);
     return this.userRepository.save(user);
   }
 

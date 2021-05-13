@@ -1,20 +1,22 @@
-import { Module} from '@nestjs/common';
-import { UserModule } from './user/user.module';
-import { UserController } from './user/user.controller';
-import { AuthModule } from './auth/auth.module';
-import { AuthController } from './auth/auth.controller';
-import { AdminModule } from './admin/admin.module';
-import { AdminController } from './admin/admin.controller';
-import { TypeOrmModule }  from '@nestjs/typeorm';
-import { Connection } from 'typeorm';
-import { ConfigService } from './config.service';
+import { Module } from '@nestjs/common';
+import { UserModule } from './modules/user/user.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { AdminModule } from './modules/admin/admin.module';
+import { DatabaseModule } from './database/database.module';
+import { SharedModule } from './modules/shared/shared.module';
+// import { Connection } from 'typeorm';
 
 @Module({
-  imports: [TypeOrmModule.forRoot(), UserModule, AuthModule, AdminModule],
-  controllers: [AuthController, UserController, AdminController],
-  providers: [ConfigService],
-  exports: [ConfigService]
+  imports: [
+    // eslint-disable-next-line prettier/prettier
+    SharedModule,
+    DatabaseModule,
+    AuthModule,
+    AdminModule,
+    UserModule,
+  ],
 })
 export class AppModule {
-  constructor(private readonly connection: Connection) {}
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  constructor() {}
 }
